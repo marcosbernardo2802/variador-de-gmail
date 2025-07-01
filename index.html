@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerador de Variações de Gmail - Crônicas Estelares</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Crie emails alternativos para o seu Gmail para usar em cadastros, organizar sua caixa de entrada e evitar spam.">
+
+    <!-- FAVICON (ÍCONE DA ABA DO NAVEGADOR) -->
+    <link rel="icon" href="https://raw.githubusercontent.com/marcosbernardo2802/portal/main/images/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/marcosbernardo2802/portal/main/images/favicon.png">
+
+    <!-- Importando a fonte temática do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --color-bg: #0a0f18;
+            --color-text: #e0e0e0;
+            --color-primary: #00f2fe;
+            --color-secondary: #e63946;
+            --color-card-bg: rgba(16, 26, 45, 0.7);
+            --color-card-border: #223354;
+            --color-shadow: rgba(0, 242, 254, 0.2);
+            --color-success: #28a745;
+            --font-main: 'Exo 2', sans-serif;
+        }
+
+        body.light-theme {
+            --color-bg: #f4f7f9;
+            --color-text: #333333;
+            --color-primary: #005fbd;
+            --color-secondary: #d90429;
+            --color-card-bg: rgba(255, 255, 255, 0.7);
+            --color-card-border: #d1d9e0;
+            --color-shadow: rgba(0, 0, 0, 0.1);
+            --color-success: #218838;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-main);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        
+        .floating-button {
+            position: fixed; z-index: 1000; cursor: pointer;
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-card-border);
+            border-radius: 50%; width: 40px; height: 40px;
+            display: flex; justify-content: center; align-items: center;
+            transition: all 0.3s ease;
+        }
+        .floating-button:hover { transform: scale(1.1); box-shadow: 0 0 10px var(--color-shadow); }
+        .floating-button svg { width: 20px; height: 20px; fill: var(--color-primary); }
+        .theme-switcher { top: 20px; right: 20px; }
+        .back-to-portal { top: 20px; left: 20px; }
+        .light-theme #theme-icon-dark, body:not(.light-theme) #theme-icon-light { display: none; }
+
+        .tool-banner {
+            margin-bottom: 3rem;
+        }
+        .tool-banner a {
+            display: block;
+            line-height: 0;
+        }
+        .tool-banner-image {
+            width: 100%;
+            height: auto;
+            max-height: 125px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid var(--color-card-border);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .tool-banner-image:hover {
+            transform: scale(1.02);
+            opacity: 0.9;
+        }
+
+        .app-card {
+            background-color: var(--color-card-bg);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--color-card-border);
+            border-radius: 12px; padding: 2.5rem; margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .light-theme .app-card { box-shadow: 0 8px 25px var(--color-shadow); }
+
+        .app-card h2 { font-size: 2rem; color: var(--color-primary); margin-bottom: 0.5rem; text-align: center; text-shadow: 0 0 8px var(--color-shadow); }
+        .app-card .subtitle { text-align: center; margin-bottom: 2rem; opacity: 0.8; }
+        
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-end;
+        }
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        input[type="email"], input[type="text"], input[type="number"] {
+            width: 100%; padding: 12px; border-radius: 8px; font-size: 1em;
+            background-color: var(--color-bg); color: var(--color-text);
+            border: 1px solid var(--color-card-border); transition: all 0.3s ease;
+        }
+        input[type="email"]:focus, input[type="text"]:focus, input[type="number"]:focus {
+            outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-shadow);
+        }
+        
+        .main-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .main-actions button {
+            flex-grow: 1; padding: 12px; font-size: 1.1em; font-weight: 700; border-radius: 8px; border: none;
+            cursor: pointer; transition: all 0.3s ease; color: #fff;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .main-actions button:hover { transform: translateY(-2px); opacity: 0.9; }
+        .main-actions .convert-btn { background: var(--color-primary); color: #0a0f18; }
+        .light-theme .main-actions .convert-btn { color: #fff; }
+        .main-actions .clear-btn { background: var(--color-secondary); }
+
+        #message { text-align: center; font-weight: 600; min-height: 24px; margin-top: 1rem; line-height: 1.2; }
+        #message.success { color: var(--color-success); }
+        #message.error { color: var(--color-secondary); }
+
+        .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .output-header h3 { margin: 0; padding-bottom: 0.5rem;}
+        
+        .output-actions { display: flex; gap: 10px; }
+        .output-actions button {
+            background-color: var(--color-success); color: #fff; border: none;
+            padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 0.9em;
+            font-weight: 700; transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .output-actions button:hover { opacity: 0.8; transform: scale(1.05); }
+        .output-actions button.copied { background-color: var(--color-primary); }
+
+        #outputContainer {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--color-bg);
+            border: 1px solid var(--color-card-border);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        .result-item:hover {
+            border-color: var(--color-primary);
+        }
+
+        .result-item.selected {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 8px var(--color-shadow);
+        }
+
+        .email-text {
+            font-family: monospace;
+            font-size: 0.95em;
+            word-break: break-all;
+        }
+
+        .copy-individual-btn {
+            background-color: var(--color-success); color: #fff; border: none;
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em;
+            font-weight: 700; transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 6px;
+            margin-left: 15px;
+        }
+        .copy-individual-btn:hover { opacity: 0.8; transform: scale(1.05); }
+        .copy-individual-btn.copied { background-color: var(--color-primary); color: var(--color-bg); }
+        
+        footer { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--color-card-border); color: #888; transition: border-color 0.3s ease; }
+        .footer-wrapper { display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
+        .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-bottom: 0.5rem; }
+        .footer-link, .donation-link, .email-link { color: var(--color-text); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; transition: color 0.3s, text-shadow 0.3s; }
+        .footer-link:hover, .donation-link:hover, .email-link:hover { color: var(--color-primary); text-shadow: 0 0 8px var(--color-shadow); }
+        .footer-link:hover span, .donation-link:hover span, .email-link:hover span { text-decoration: underline; }
+        .youtube-icon { width: 28px; height: 20px; flex-shrink: 0; }
+        .donation-link svg, .email-link svg { width: 20px; height: 20px; fill: var(--color-primary); transition: fill 0.3s; }
+        .copyright-text { font-size: 0.9em; color: #888; }
+    </style>
+</head>
+<body id="top">
+
+    <a href="https://cronicasestelares.vercel.app/" class="floating-button back-to-portal" title="Voltar ao portal Crônicas Estelares">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </a>
+    <div id="theme-toggle" class="floating-button theme-switcher" title="Alternar tema">
+        <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.64,13.14C20.97,13.14 20.3,13.42 19.82,13.9C19.34,14.38 19.06,15.05 19.06,15.72C19.06,16.39 19.34,17.06 19.82,17.54C20.3,18.02 20.97,18.3 21.64,18.3C22.31,18.3 22.98,18.02 23.46,17.54C23.94,17.06 24.22,16.39 24.22,15.72C24.22,15.05 23.94,14.38 23.46,13.9C22.98,13.42 22.31,13.14 21.64,13.14Z M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22C15.93,22 19.33,19.79 20.94,16.63C17.9,17.56 14.62,16.4 12.5,13.82C10.38,11.24 10.45,7.87 12.68,5.3C11.39,4.28 9.81,3.75 8.12,4.05C5.91,4.5 4.05,6.17 3.34,8.36C2.63,10.55 3.19,12.94 4.83,14.57C6.47,16.21 8.85,16.78 11.05,16.07C11.33,16 11.62,15.95 11.9,15.9C11.53,15.33 11.25,14.68 11.09,14C10.23,10.82 11.7,7.5 14.5,5.8C15.45,5.23 16.5,4.96 17.55,5C17.84,2.92 15.15,2 12,2Z"/></svg>
+        <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5V2.5H11V4.5H12M18.6,6.5L19.8,5.3L18.4,3.9L17.2,5.1L18.6,6.5M20.5,11H22.5V12H20.5V11M17.2,18.9L18.4,20.1L19.8,18.7L18.6,17.5L17.2,18.9M12,20.5V22.5H13V20.5H12M5.4,17.5L4.2,18.7L2.8,17.3L4,16.1L5.4,17.5M3.5,12H1.5V11H3.5V12M6.8,5.1L5.6,3.9L4.2,5.3L5.4,6.5L6.8,5.1Z"/></svg>
+    </div>
+    
+    <main class="container">
+        <div class="tool-banner">
+            <a href="https://www.youtube.com/@CronicasEstelaress" target="_blank" rel="noopener noreferrer" title="Visite o canal Crônicas Estelares no YouTube">
+                <img class="tool-banner-image" src="https://raw.githubusercontent.com/marcosbernardo2802/portal/main/images/baner-app.png" alt="Banner da aplicação">
+            </a>
+        </div>
+        <div class="app-card">
+            <h2><i class="fas fa-envelope-open-text"></i> Gerador de Variações de Gmail</h2>
+            <p class="subtitle">Crie emails alternativos para cadastros e organize sua caixa de entrada.</p>
+            
+            <div class="form-group">
+                <label for="emailInput">O seu Gmail:</label>
+                <input type="email" id="emailInput" placeholder="exemplo@gmail.com">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="startNumberInput">Número Inicial:</label>
+                    <input type="number" id="startNumberInput" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="quantityInput">Número de Variações:</label>
+                    <input type="number" id="quantityInput" value="10" min="1" max="1000">
+                </div>
+            </div>
+
+
+            <div class="main-actions">
+                <button id="generateBtn" class="convert-btn" title="Gerar os emails numerados"><i class="fas fa-cogs"></i> Gerar Variações</button>
+                <button id="clearBtn" class="clear-btn" title="Limpar todos os campos"><i class="fas fa-trash-alt"></i> Limpar</button>
+            </div>
+            
+            <div id="message"></div>
+        </div>
+
+        <div id="output" style="display: none;">
+            <div class="app-card">
+                <div class="output-header">
+                    <h3><i class="fas fa-file-alt"></i> Variações Geradas</h3>
+                    <div class="output-actions">
+                        <button id="copyAllBtn" title="Copiar toda a lista de emails"><i class="fas fa-copy"></i> Copiar Tudo</button>
+                        <button id="downloadBtn" title="Baixar a lista como um ficheiro .txt"><i class="fas fa-download"></i> Baixar Lista</button>
+                    </div>
+                </div>
+                <div id="outputContainer"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer>
+        <div class="container footer-wrapper">
+            <div class="footer-links">
+                <a href="https://www.youtube.com/@CronicasEstelaress" target="_blank" rel="noopener noreferrer" class="footer-link" title="Aceder ao nosso canal no YouTube">
+                    <svg class="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 20" aria-hidden="true"><rect width="28" height="20" rx="4" fill="#FF0000"/><path d="M11,14 L18,10 L11,6 V14 Z" fill="#FFFFFF"/></svg>
+                    <span>Acesse nosso canal no YouTube</span>
+                </a>
+                <a href="https://page-doacao.vercel.app/" target="_blank" rel="noopener noreferrer" class="donation-link" title="Apoie este projeto com uma doação">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span>Apoie este projeto</span>
+                </a>
+                <a href="mailto:cronicasestelares.oficial@gmail.com" target="_blank" rel="noopener noreferrer" class="email-link" title="Envie-nos um e-mail">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span>cronicasestelares.oficial@gmail.com</span>
+                </a>
+            </div>
+            <p class="copyright-text">&copy; <span id="current-year"></span> Crônicas Estelares. Todos os sistemas operacionais.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- ELEMENTOS DO DOM ---
+            const emailInput = document.getElementById('emailInput');
+            const startNumberInput = document.getElementById('startNumberInput');
+            const quantityInput = document.getElementById('quantityInput');
+            const generateBtn = document.getElementById('generateBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const outputDiv = document.getElementById('output');
+            const outputContainer = document.getElementById('outputContainer');
+            const messageDiv = document.getElementById('message');
+            const copyAllBtn = document.getElementById('copyAllBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            let lastCopiedButton = null;
+            let lastSelectedItem = null;
+            let generatedEmails = [];
+            const originalCopyHTML = '<i class="fas fa-copy"></i>';
+
+            // --- FUNÇÕES UTILITÁRIAS ---
+            const copyToClipboard = (text, button) => {
+                if (!text) return;
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.top = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    
+                    if (button && button.classList.contains('copy-individual-btn')) { // Se for um botão individual
+                        const parentItem = button.closest('.result-item');
+                        const emailTextSpan = parentItem.querySelector('.email-text');
+                        
+                        if (window.getSelection && document.createRange) {
+                            const selection = window.getSelection();
+                            const range = document.createRange();
+                            range.selectNodeContents(emailTextSpan);
+                            selection.removeAllRanges();
+                            selection.addRange(range);
+                        }
+                        
+                        if (lastCopiedButton) {
+                            lastCopiedButton.innerHTML = originalCopyHTML;
+                            lastCopiedButton.classList.remove('copied');
+                        }
+                        if (lastSelectedItem) {
+                            lastSelectedItem.classList.remove('selected');
+                        }
+
+                        button.innerHTML = '<i class="fas fa-check"></i>';
+                        button.classList.add('copied');
+                        parentItem.classList.add('selected');
+                        
+                        lastCopiedButton = button;
+                        lastSelectedItem = parentItem;
+                    } else if (button) { // Se for o botão "Copiar Tudo"
+                        const originalHTML = button.innerHTML;
+                        button.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                        button.classList.add('copied');
+                        setTimeout(() => {
+                            button.innerHTML = originalHTML;
+                            button.classList.remove('copied');
+                        }, 2000);
+                    }
+
+                } catch (err) {
+                    console.error('Falha ao copiar:', err);
+                    showMessage('Falha ao copiar para a área de transferência.', 'error');
+                }
+                document.body.removeChild(textArea);
+            };
+
+            const downloadFile = (text) => {
+                if (!text) return;
+                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'lista_de_emails.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+
+            const showMessage = (msg, type = 'success', duration = 4000) => {
+                messageDiv.innerHTML = msg;
+                messageDiv.className = type;
+                setTimeout(() => { messageDiv.innerHTML = ''; }, duration);
+            };
+
+            // --- LÓGICA PRINCIPAL ---
+            const generateVariations = () => {
+                const email = emailInput.value.trim().toLowerCase();
+                if (!email) {
+                    showMessage('Por favor, insira um endereço de email.', 'error');
+                    return;
+                }
+
+                const emailParts = email.split('@');
+                if (emailParts.length !== 2 || !emailParts[0] || !emailParts[1]) {
+                    showMessage('Formato de email inválido.', 'error');
+                    return;
+                }
+
+                let [username, domain] = emailParts;
+                
+                if (domain !== 'gmail.com' && domain !== 'googlemail.com') {
+                     showMessage('Esta ferramenta funciona apenas com emails @gmail.com ou @googlemail.com.', 'error');
+                    return;
+                }
+                
+                username = username.replace(/\./g, '').split('+')[0];
+
+                const startNumber = parseInt(startNumberInput.value, 10);
+                const quantity = parseInt(quantityInput.value, 10);
+
+                if (isNaN(startNumber) || startNumber < 1) {
+                    showMessage('Por favor, insira um número inicial válido.', 'error');
+                    return;
+                }
+                if (isNaN(quantity) || quantity < 1) {
+                    showMessage('Por favor, insira uma quantidade válida (maior que 0).', 'error');
+                    return;
+                }
+                
+                outputContainer.innerHTML = '';
+                generatedEmails = [];
+                lastCopiedButton = null;
+                lastSelectedItem = null;
+                if (window.getSelection) { window.getSelection().removeAllRanges(); }
+
+                for (let i = 0; i < quantity; i++) {
+                    const currentNumber = startNumber + i;
+                    const paddedNumber = currentNumber.toString().padStart(3, '0');
+                    const newEmail = `${username}+${paddedNumber}@${domain}`;
+                    generatedEmails.push(newEmail);
+                    
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+
+                    const emailText = document.createElement('span');
+                    emailText.className = 'email-text';
+                    emailText.textContent = newEmail;
+
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-individual-btn';
+                    copyButton.innerHTML = originalCopyHTML;
+                    copyButton.title = `Copiar ${newEmail}`;
+                    
+                    copyButton.addEventListener('click', () => {
+                        copyToClipboard(newEmail, copyButton);
+                    });
+
+                    resultItem.appendChild(emailText);
+                    resultItem.appendChild(copyButton);
+                    outputContainer.appendChild(resultItem);
+                }
+                
+                outputDiv.style.display = 'block';
+                showMessage(`Sucesso! ${quantity} variações numeradas foram geradas.`, 'success');
+            };
+
+
+            // --- EVENT LISTENERS ---
+            generateBtn.addEventListener('click', generateVariations);
+            
+            clearBtn.addEventListener('click', () => {
+                emailInput.value = '';
+                startNumberInput.value = '1';
+                quantityInput.value = '10';
+                outputContainer.innerHTML = '';
+                outputDiv.style.display = 'none';
+                showMessage('Campos limpos!', 'success');
+                generatedEmails = [];
+                lastCopiedButton = null;
+                lastSelectedItem = null;
+                if (window.getSelection) { window.getSelection().removeAllRanges(); }
+            });
+
+            copyAllBtn.addEventListener('click', () => {
+                if(generatedEmails.length > 0) {
+                    copyToClipboard(generatedEmails.join('\n'), copyAllBtn);
+                }
+            });
+
+            downloadBtn.addEventListener('click', () => {
+                if(generatedEmails.length > 0) {
+                    downloadFile(generatedEmails.join('\n'));
+                }
+            });
+
+            // --- LÓGICA DO TEMA ---
+            const themeToggleButton = document.getElementById('theme-toggle');
+            themeToggleButton.addEventListener('click', () => {
+                const isLight = document.body.classList.toggle('light-theme');
+                localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            });
+
+            const applyInitialTheme = () => {
+                const storedTheme = localStorage.getItem('theme');
+                if (storedTheme) {
+                    document.body.classList.toggle('light-theme', storedTheme === 'light');
+                } else {
+                    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+                    document.body.classList.toggle('light-theme', prefersLight);
+                }
+            };
+            applyInitialTheme();
+
+            if (document.getElementById('current-year')) {
+                document.getElementById('current-year').textContent = new Date().getFullYear();
+            }
+        });
+    </script>
+</body>
+</html>
