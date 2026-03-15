@@ -1,6 +1,146 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
+<!-- ================= INÍCIO DO CÓDIGO CAMALEÃO ================= -->
+<script>
+    // CÓDIGO CAMALEÃO v8.0 (Desintegração Total de Títulos e Botões)
+    window.addEventListener('message', function(event) {
+        if (event.data) {
+            
+            // 1. Camuflagem de Cores (Ajusta o tema Claro/Escuro)
+            if (event.data.action === 'setTheme') {
+                const theme = event.data.theme;
+                if (theme === 'light') {
+                    document.body.classList.add('light-theme');
+                    document.body.classList.remove('dark-theme');
+                } else {
+                    document.body.classList.remove('light-theme');
+                    document.body.classList.add('dark-theme');
+                }
+            }
+
+            // 2. Modo Módulo Embutido (Ocultar TUDO o que for externo)
+            if (event.data.isPortal === true) {
+                
+                // ATAQUE 1: Seletores de Estrutura
+                const seletores = [
+                    'header', 'footer', '.banner', '[class*="banner"]', 
+                    '.footer-links', '.theme-switcher', '#theme-toggle', '.back-to-top', 'nav',
+                    'a[href="/"]', 'a[href="index.html"]', 
+                    'a[href*="cronicasestelares"]'
+                ].join(', ');
+
+                document.querySelectorAll(seletores).forEach(function(el) { 
+                    el.style.display = 'none'; 
+                });
+
+                // ATAQUE 2: Caçador de Elementos Iniciais (Destrói o primeiro título da página)
+                const primeiroTitulo = document.querySelector('h1, h2, .title, .page-title, [class*="titulo"], .header-title');
+                if (primeiroTitulo) {
+                    primeiroTitulo.style.display = 'none';
+                }
+
+                // ATAQUE 3: Caçador de Texto Implacável (Busca botões e títulos pelo que está escrito)
+                const todosElementos = document.querySelectorAll('a, button, h1, h2, h3, h4, span, div, p, strong, b');
+                todosElementos.forEach(function(el) {
+                    // Ignora elementos que são "caixas grandes" com muitos itens dentro para não apagar a ferramenta inteira
+                    if (el.children.length > 1) return;
+                    
+                    const texto = el.textContent.toLowerCase().trim();
+                    const link = el.href ? el.href.toLowerCase() : '';
+                    
+                    // 3.1 Caça Botão Home
+                    if (texto === 'home' || texto === 'início' || texto === 'inicio' || texto === 'voltar ao portal' || link.includes('cronicasestelares.vercel.app')) {
+                        el.style.display = 'none';
+                    }
+
+                    // 3.2 Caça Títulos Rebeldes (Nomes exatos das ferramentas)
+                    const nomesProibidos = [
+                        'divisor de texto', 
+                        'conversor de roteiro para .srt', 
+                        'conversor para .srt',
+                        'conversor srt',
+                        'remover silêncio do áudio', 
+                        'remover silêncio',
+                        'variador de gmail',
+                        'apoio ao projeto',
+                        'seja um protagonista'
+                    ];
+
+                    if (nomesProibidos.includes(texto)) {
+                        el.style.display = 'none';
+                    }
+                });
+
+                // ATAQUE 4: Camuflagem Estelar (Injeção de CSS para Cores e Transparência)
+                const camaleaoStyle = document.createElement('style');
+                camaleaoStyle.innerHTML = `
+                    /* 1. Fundo Transparente para herdar o visual da Nave-Mãe */
+                    html, body, main {
+                        background: transparent !important;
+                        background-color: transparent !important;
+                    }
+
+                    /* 2. Sobrescreve as variáveis do Comandante para as cores exatas do Portal */
+                    :root {
+                        --color-bg: transparent !important;
+                        --color-card-bg: #1e1e20 !important; /* Surface Escura */
+                        --color-text: #e3e3e3 !important; /* Texto Escuro */
+                        --color-card-border: #333537 !important;
+                        --color-primary: #00f2fe !important;
+                    }
+
+                    body.light-theme {
+                        --color-card-bg: #f0f4f9 !important; /* Surface Clara */
+                        --color-text: #1f1f1f !important; /* Texto Claro */
+                        --color-card-border: #d1d9e0 !important;
+                    }
+
+                    /* 3. Força elementos Tailwind hardcoded a respeitarem a camuflagem */
+                    .bg-white, .bg-gray-900, .bg-gray-800, .bg-[#0a0f18], .bg-[#101a2d] { 
+                        background-color: var(--color-card-bg) !important; 
+                        border-color: var(--color-card-border) !important;
+                    }
+                    .text-gray-900, .text-gray-800, .text-white, .text-gray-200 { 
+                        color: var(--color-text) !important; 
+                    }
+                `;
+                document.head.appendChild(camaleaoStyle);
+
+                // Limpeza da área de trabalho (Puxa a ferramenta para o topo)
+                const areaPrincipal = document.querySelector('main');
+                if (areaPrincipal) {
+                    areaPrincipal.style.paddingTop = '0.5rem';
+                    areaPrincipal.style.marginTop = '0';
+                }
+
+                // Trava a barra de rolagem dupla (deixa apenas a rolagem do Portal)
+                document.documentElement.style.overflowY = 'hidden';
+                document.body.style.overflowY = 'hidden';
+
+                // 3. Ajuste de Altura Anti-Loop (Informa ao Portal o tamanho exato do App)
+                let ultimaAltura = 0;
+                function informarAltura() {
+                    const alturaAtual = document.body.scrollHeight;
+                    if (alturaAtual !== ultimaAltura && alturaAtual > 0) {
+                        ultimaAltura = alturaAtual;
+                        window.parent.postMessage({ action: 'resizeIframe', height: alturaAtual }, '*');
+                    }
+                }
+
+                informarAltura();
+                // O MutationObserver garante que se a ferramenta mudar de tamanho (ex: gerar um texto), o iframe cresce junto
+                const observer = new MutationObserver(informarAltura);
+                observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+            }
+        }
+    });
+</script>
+<!-- ================= FIM DO CÓDIGO CAMALEÃO ================= -->
+<!-- ================= FIM DO CÓDIGO CAMALEÃO ================= -->
+
+    
     <meta charset="UTF-8">
     <title>Gerador de Variações de Gmail - Crônicas Estelares</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
