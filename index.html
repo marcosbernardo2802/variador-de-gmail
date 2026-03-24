@@ -138,8 +138,6 @@
     });
 </script>
 <!-- ================= FIM DO CÓDIGO CAMALEÃO ================= -->
-<!-- ================= FIM DO CÓDIGO CAMALEÃO ================= -->
-
     
     <meta charset="UTF-8">
     <title>Gerador de Variações de Gmail - Crônicas Estelares</title>
@@ -191,8 +189,17 @@
             transition: background-color 0.3s ease, color 0.3s ease;
             min-height: 100vh;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         
+        /* Forçando a largura para 100% */
+        .container { width: 100% !important; max-width: 100% !important; margin: 0 auto; padding: 2rem; }
+        
+        /* Scrollbar customizada */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--color-bg); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--color-card-border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+        * { scrollbar-width: thin; scrollbar-color: var(--color-card-border) var(--color-bg); }
+
         .floating-button {
             position: fixed; z-index: 1000; cursor: pointer;
             background-color: var(--color-card-bg);
@@ -207,26 +214,14 @@
         .back-to-portal { top: 20px; left: 20px; }
         .light-theme #theme-icon-dark, body:not(.light-theme) #theme-icon-light { display: none; }
 
-        .tool-banner {
-            margin-bottom: 3rem;
-        }
-        .tool-banner a {
-            display: block;
-            line-height: 0;
-        }
+        .tool-banner { margin-bottom: 3rem; }
+        .tool-banner a { display: block; line-height: 0; }
         .tool-banner-image {
-            width: 100%;
-            height: auto;
-            max-height: 125px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 1px solid var(--color-card-border);
+            width: 100%; height: auto; max-height: 125px; object-fit: cover;
+            border-radius: 12px; border: 1px solid var(--color-card-border);
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
-        .tool-banner-image:hover {
-            transform: scale(1.02);
-            opacity: 0.9;
-        }
+        .tool-banner-image:hover { transform: scale(1.02); opacity: 0.9; }
 
         .app-card {
             background-color: var(--color-card-bg);
@@ -237,28 +232,19 @@
         }
         .light-theme .app-card { box-shadow: 0 8px 25px var(--color-shadow); }
 
-        .app-card h2 { font-size: 2rem; color: var(--color-primary); margin-bottom: 0.5rem; text-align: center; text-shadow: 0 0 8px var(--color-shadow); }
-        .app-card .subtitle { text-align: center; margin-bottom: 2rem; opacity: 0.8; }
+        .app-card h2 { font-size: 1.6rem; color: var(--color-primary); margin-bottom: 0.5rem; text-align: center; text-shadow: 0 0 8px var(--color-shadow); }
+        .app-card .subtitle { text-align: center; margin-bottom: 2rem; opacity: 0.8; font-size: 0.85rem; }
         
         .form-group { margin-bottom: 1.5rem; }
         .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
+            display: block; margin-bottom: 0.5rem; font-weight: 700; font-size: 0.85rem;
         }
 
-        .form-row {
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-end;
-        }
-        .form-row .form-group {
-            flex: 1;
-            margin-bottom: 0;
-        }
+        .form-row { display: flex; gap: 1.5rem; align-items: flex-end; }
+        .form-row .form-group { flex: 1; margin-bottom: 0; }
 
         input[type="email"], input[type="text"], input[type="number"] {
-            width: 100%; padding: 12px; border-radius: 8px; font-size: 1em;
+            width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 0.85rem;
             background-color: var(--color-bg); color: var(--color-text);
             border: 1px solid var(--color-card-border); transition: all 0.3s ease;
         }
@@ -266,86 +252,94 @@
             outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-shadow);
         }
         
-        .main-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        /* Botões minimalistas */
+        .main-actions { display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end; }
         .main-actions button {
-            flex-grow: 1; padding: 12px; font-size: 1.1em; font-weight: 700; border-radius: 8px; border: none;
-            cursor: pointer; transition: all 0.3s ease; color: #fff;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 6px 12px; font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: none;
+            cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 6px;
         }
         .main-actions button:hover { transform: translateY(-2px); opacity: 0.9; }
-        .main-actions .convert-btn { background: var(--color-primary); color: #0a0f18; }
+        .main-actions .convert-btn { background: var(--color-primary); color: #000; }
         .light-theme .main-actions .convert-btn { color: #fff; }
-        .main-actions .clear-btn { background: var(--color-secondary); }
+        .main-actions .clear-btn { background: var(--color-secondary); color: #fff; }
+        .main-actions button i { font-size: 0.75rem; }
 
-        #message { text-align: center; font-weight: 600; min-height: 24px; margin-top: 1rem; line-height: 1.2; }
+        #message { text-align: center; font-weight: 600; min-height: 24px; margin-top: 1rem; line-height: 1.2; font-size: 0.85rem; }
         #message.success { color: var(--color-success); }
         #message.error { color: var(--color-secondary); }
 
         .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .output-header h3 { margin: 0; padding-bottom: 0.5rem;}
+        .output-header h3 { margin: 0; padding-bottom: 0.5rem; font-size: 1rem;}
         
-        .output-actions { display: flex; gap: 10px; }
+        .output-actions { display: flex; gap: 8px; }
         .output-actions button {
             background-color: var(--color-success); color: #fff; border: none;
-            padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 0.9em;
-            font-weight: 700; transition: all 0.2s ease;
-            display: flex; align-items: center; gap: 8px;
+            padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.7rem;
+            font-weight: 700; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px;
         }
         .output-actions button:hover { opacity: 0.8; transform: scale(1.05); }
-        .output-actions button.copied { background-color: var(--color-primary); }
+        .output-actions button.copied { background-color: var(--color-primary); color: #000; }
+        .light-theme .output-actions button.copied { color: #fff; }
 
         #outputContainer {
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 10px;
+            /* Removido o max-height e o overflow para a lista crescer infinitamente */
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* Usa gap em vez de margin-bottom nos itens */
         }
 
         .result-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: var(--color-bg);
-            border: 1px solid var(--color-card-border);
-            border-radius: 8px;
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: space-between;
+            background-color: var(--color-bg); border: 1px solid var(--color-card-border);
+            border-radius: 6px; padding: 8px 12px; transition: all 0.2s ease;
         }
-        
-        .result-item:hover {
-            border-color: var(--color-primary);
-        }
+        .result-item:hover { border-color: var(--color-primary); }
+        .result-item.selected { border-color: var(--color-primary); box-shadow: 0 0 8px var(--color-shadow); }
 
-        .result-item.selected {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 8px var(--color-shadow);
-        }
-
-        .email-text {
-            font-family: monospace;
-            font-size: 0.95em;
-            word-break: break-all;
-        }
+        .email-text { font-family: monospace; font-size: 0.85em; word-break: break-all; }
 
         .copy-individual-btn {
             background-color: var(--color-success); color: #fff; border: none;
-            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em;
-            font-weight: 700; transition: all 0.2s ease;
-            display: flex; align-items: center; gap: 6px;
-            margin-left: 15px;
+            padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;
+            transition: all 0.2s ease; display: flex; align-items: center; justify-content: center;
+            margin-left: 10px; min-width: 28px;
         }
         .copy-individual-btn:hover { opacity: 0.8; transform: scale(1.05); }
-        .copy-individual-btn.copied { background-color: var(--color-primary); color: var(--color-bg); }
+        .copy-individual-btn.copied { background-color: var(--color-primary); color: #000; }
+        .light-theme .copy-individual-btn.copied { color: #fff; }
+
+        /* ESTILOS DO MODAL DE CONFIRMAÇÃO */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
+            z-index: 2000; display: none; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .modal-content {
+            max-width: 400px; width: 90%; margin: 0;
+            transform: translateY(20px); transition: transform 0.3s ease; padding: 2rem; text-align: center;
+        }
+        .modal-overlay.show .modal-content { transform: translateY(0); }
+        .modal-content h3 { margin-bottom: 1rem; font-size: 1.2rem; color: var(--color-text); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .modal-content p { margin-bottom: 1.5rem; opacity: 0.8; font-size: 0.85rem; }
+        .modal-actions { display: flex; gap: 1rem; justify-content: center; }
+        .modal-actions button { padding: 6px 16px; font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s ease; }
+        .cancel-btn { background-color: transparent; border: 1px solid var(--color-card-border) !important; color: var(--color-text); }
+        .cancel-btn:hover { background-color: rgba(255,255,255,0.05); }
+        .light-theme .cancel-btn:hover { background-color: rgba(0,0,0,0.05); }
+        .confirm-btn { background-color: var(--color-secondary); color: #fff; }
+        .confirm-btn:hover { opacity: 0.9; transform: scale(1.05); }
         
         footer { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--color-card-border); color: #888; transition: border-color 0.3s ease; }
         .footer-wrapper { display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
         .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-bottom: 0.5rem; }
-        .footer-link, .donation-link, .email-link { color: var(--color-text); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; transition: color 0.3s, text-shadow 0.3s; }
+        .footer-link, .donation-link, .email-link { color: var(--color-text); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; transition: color 0.3s, text-shadow 0.3s; font-size: 0.9rem; }
         .footer-link:hover, .donation-link:hover, .email-link:hover { color: var(--color-primary); text-shadow: 0 0 8px var(--color-shadow); }
         .footer-link:hover span, .donation-link:hover span, .email-link:hover span { text-decoration: underline; }
-        .youtube-icon { width: 28px; height: 20px; flex-shrink: 0; }
-        .donation-link svg, .email-link svg { width: 20px; height: 20px; fill: var(--color-primary); transition: fill 0.3s; }
-        .copyright-text { font-size: 0.9em; color: #888; }
+        .youtube-icon { width: 24px; height: 18px; flex-shrink: 0; }
+        .donation-link svg, .email-link svg { width: 18px; height: 18px; fill: var(--color-primary); transition: fill 0.3s; }
+        .copyright-text { font-size: 0.8rem; color: #888; }
     </style>
 </head>
 <body id="top">
@@ -384,7 +378,6 @@
                 </div>
             </div>
 
-
             <div class="main-actions">
                 <button id="generateBtn" class="convert-btn" title="Gerar os emails numerados"><i class="fas fa-cogs"></i> Gerar Variações</button>
                 <button id="clearBtn" class="clear-btn" title="Limpar todos os campos"><i class="fas fa-trash-alt"></i> Limpar</button>
@@ -406,6 +399,18 @@
             </div>
         </div>
     </main>
+
+    <!-- MODAL DE CONFIRMAÇÃO -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-content app-card">
+            <h3><i class="fas fa-exclamation-triangle" style="color: var(--color-secondary);"></i> Atenção</h3>
+            <p>Tem a certeza que deseja limpar as variações geradas e os campos de entrada? Esta ação não pode ser desfeita.</p>
+            <div class="modal-actions">
+                <button id="cancelClearBtn" class="cancel-btn">Cancelar</button>
+                <button id="confirmClearBtn" class="confirm-btn">Sim, Limpar</button>
+            </div>
+        </div>
+    </div>
 
     <!-- RODAPÉ -->
     <footer>
@@ -441,6 +446,11 @@
             const messageDiv = document.getElementById('message');
             const copyAllBtn = document.getElementById('copyAllBtn');
             const downloadBtn = document.getElementById('downloadBtn');
+            
+            // Elementos do Modal
+            const confirmModal = document.getElementById('confirmModal');
+            const confirmClearBtn = document.getElementById('confirmClearBtn');
+            const cancelClearBtn = document.getElementById('cancelClearBtn');
             
             let lastCopiedButton = null;
             let lastSelectedItem = null;
@@ -593,11 +603,21 @@
                 showMessage(`Sucesso! ${quantity} variações numeradas foram geradas.`, 'success');
             };
 
+            // Lógica do Modal de Limpeza
+            const openModal = () => { confirmModal.classList.add('show'); };
+            const closeModal = () => { confirmModal.classList.remove('show'); };
 
             // --- EVENT LISTENERS ---
             generateBtn.addEventListener('click', generateVariations);
             
             clearBtn.addEventListener('click', () => {
+                if (emailInput.value.trim() === '' && generatedEmails.length === 0) return;
+                openModal();
+            });
+
+            cancelClearBtn.addEventListener('click', closeModal);
+
+            confirmClearBtn.addEventListener('click', () => {
                 emailInput.value = '';
                 startNumberInput.value = '1';
                 quantityInput.value = '10';
@@ -608,6 +628,12 @@
                 lastCopiedButton = null;
                 lastSelectedItem = null;
                 if (window.getSelection) { window.getSelection().removeAllRanges(); }
+                closeModal();
+            });
+
+            // Fechar modal ao clicar fora
+            confirmModal.addEventListener('click', (e) => {
+                if (e.target === confirmModal) closeModal();
             });
 
             copyAllBtn.addEventListener('click', () => {
